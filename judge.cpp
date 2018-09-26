@@ -1,4 +1,6 @@
 #include "judge.h"
+#include "ai.h"
+#include "human.h"
 
 Judge::Judge()
 {
@@ -54,8 +56,8 @@ int Judge::putChess(QPoint pos)
 
 int Judge::playWithHum()
 {
-    player[0] = new Player();
-    player[1] = new Player();
+    player[0] = new Human();
+    player[1] = new Human();
     if(chessboard != NULL)
     {
         delete [] chessboard;
@@ -70,6 +72,7 @@ int Judge::resetJudge()
 {
     term = 0;
     game_mode = 0;
+    return 0;
 }
 
 int Judge::isWin(QPoint pos)
@@ -110,6 +113,6 @@ int Judge::isWin(QPoint pos)
 Judge::~Judge()
 {
     delete[] chessboard;
-    delete[] player;
+    delete player[2];
 
 }

@@ -12,6 +12,7 @@ private:
     int win;
 public:
     Player();
+    ~Player();
 
 //    virtual int put(Chessboard chessboard) = 0;
 };

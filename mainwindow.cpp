@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setWindowOpacity(0.95);
     judge = new Judge();
@@ -20,11 +21,33 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    if((event->pos().x() < 30 || event->pos().x() > 783 || event->pos().y() < 30 || event->pos().y() > 784) && event->button() == Qt::LeftButton)
+    {
+        is_drag = true;
+        mouse_position = event->globalPos() - this->pos();
+    }
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if(is_drag && (event->buttons() && Qt::LeftButton))
+    {
+        this->move(event->globalPos() - mouse_position);
+    }
+}
+
 
 
 // (33,34)
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
+    if(event->pos().x() < 30 || event->pos().x() > 783 || event->pos().y() < 30 || event->pos().y() > 784)
+    {
+        is_drag = false;
+        return;
+    }
     if(judge->getGameMode() == 0 || typeid(judge->getPlayer(judge->getTerm())) == typeid(Ai))
     {
         return;
@@ -33,8 +56,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
     QPoint pos = event->pos();
     pos.setX((pos.x()-8) / 50);
     pos.setY((pos.y()-9) / 50);
-    if(event->pos().x() < 30 || event->pos().x() > 783 || event->pos().y() < 30 || event->pos().y() > 784)
-        return;
+
     if(judge->putChess(pos))
     {
         judge->resetJudge();
@@ -80,4 +102,9 @@ void MainWindow::paintEvent(QPaintEvent *event)
 void MainWindow::on_startWithHum_clicked()
 {
     judge->playWithHum();
+}
+
+void MainWindow::on_exit_clicked()
+{
+    this->close();
 }

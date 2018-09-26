@@ -21,12 +21,17 @@ public:
 private:
     Ui::MainWindow *ui;
     Judge *judge;
+    bool is_drag = false;
+    QPoint mouse_position;
 
 protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
 private slots:
     void on_startWithHum_clicked();
+    void on_exit_clicked();
 };
 
 #endif // MAINWINDOW_H
