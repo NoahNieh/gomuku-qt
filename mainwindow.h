@@ -25,6 +25,8 @@ private:
 protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
+private slots:
+    void on_startWithHum_clicked();
 };
 
 #endif // MAINWINDOW_H

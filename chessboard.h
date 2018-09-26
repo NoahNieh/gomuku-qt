@@ -13,7 +13,6 @@ public:
     Chessboard();
     int setChess(QPoint pos, int role);
     int getChess(QPoint pos);
-//    int isWin(Chess c);
 //    int evaluateSituation(int side);
 //    std::queue<Chess> generateNextStep();
 };

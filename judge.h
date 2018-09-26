@@ -22,6 +22,10 @@ public:
     int putChess(QPoint pos);
     int removeChess(QPoint pos);
     QPoint putChessAi();
+    int playWithCom();
+    int playWithHum();
+    int resetJudge(); //tmp
+    int isWin(QPoint pos);
     ~Judge();
 };
 

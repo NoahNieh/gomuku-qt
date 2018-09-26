@@ -35,7 +35,10 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
     pos.setY((pos.y()-9) / 50);
     if(event->pos().x() < 30 || event->pos().x() > 783 || event->pos().y() < 30 || event->pos().y() > 784)
         return;
-    judge->putChess(pos);
+    if(judge->putChess(pos))
+    {
+        judge->resetJudge();
+    }
     update();
     return;
 }
@@ -47,10 +50,10 @@ void MainWindow::paintEvent(QPaintEvent *event)
     pix.load(":/image/cb.png");
     painter.drawPixmap(0, 0, pix.width(), pix.height(), pix);
     Chessboard *chessboard = judge->getChessboard();
+    if(chessboard == NULL) return;
     painter.setPen(QColor(Qt::black));
     painter.setBrush(QBrush(Qt::black));
     QPoint pos;
-
     for(pos.setX(0); pos.x()<15; pos.setX(pos.x()+1))
     {
         for(pos.setY(0); pos.y()<15; pos.setY(pos.y()+1))
@@ -72,4 +75,9 @@ void MainWindow::paintEvent(QPaintEvent *event)
         }
     }
     return;
+}
+
+void MainWindow::on_startWithHum_clicked()
+{
+    judge->playWithHum();
 }
