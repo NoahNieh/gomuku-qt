@@ -4,3 +4,8 @@ Player::Player()
 {
 
 }
+
+Player::~Player()
+{
+
+}
