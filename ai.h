@@ -9,6 +9,7 @@ class Ai : public Player
 public:
     Ai();
     QPoint generateNextStep(Chessboard chessboard);
+
 };
 
 #endif // AI_H

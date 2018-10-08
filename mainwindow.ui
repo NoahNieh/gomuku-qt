@@ -17,7 +17,7 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="startWithCom">
+   <widget class="QPushButton" name="playWithCom">
     <property name="geometry">
      <rect>
       <x>820</x>
@@ -27,10 +27,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>StartWithCom</string>
+     <string>playWithCom</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="startWithHum">
+   <widget class="QPushButton" name="playWithHum">
     <property name="geometry">
      <rect>
       <x>820</x>
@@ -40,7 +40,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>StartWithHum</string>
+     <string>playWithHum</string>
     </property>
    </widget>
    <widget class="QPushButton" name="exit">

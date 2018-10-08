@@ -21,5 +21,6 @@ int Chessboard::setChess(QPoint pos, int role)
 
 int Chessboard::getChess(QPoint pos)
 {
+    if(pos.x()>=15 || pos.x()<0 || pos.y()<0 || pos.y()>=15) return 0;
     return this->chessboard[pos.x()][pos.y()];
 }
