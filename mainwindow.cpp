@@ -43,21 +43,23 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 // (33,34)
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
+    //棋盘外
     if(event->pos().x() < 30 || event->pos().x() > 783 || event->pos().y() < 30 || event->pos().y() > 784)
     {
         is_drag = false;
         return;
     }
+
+    //棋盘内
     if(judge->getGameMode() == 0 || typeid(judge->getPlayer(judge->getTerm())) == typeid(Ai))
     {
         return;
     }
-
     QPoint pos = event->pos();
     pos.setX((pos.x()-8) / 50);
     pos.setY((pos.y()-9) / 50);
 
-    if(judge->putChess(pos))
+    if(judge->putChess(pos) == 1)
     {
         judge->resetJudge();
     }
@@ -73,8 +75,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.drawPixmap(0, 0, pix.width(), pix.height(), pix);
     Chessboard *chessboard = judge->getChessboard();
     if(chessboard == NULL) return;
-    painter.setPen(QColor(Qt::black));
-    painter.setBrush(QBrush(Qt::black));
     QPoint pos;
     for(pos.setX(0); pos.x()<15; pos.setX(pos.x()+1))
     {
@@ -99,7 +99,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     return;
 }
 
-void MainWindow::on_startWithHum_clicked()
+void MainWindow::on_playWithHum_clicked()
 {
     judge->playWithHum();
 }
