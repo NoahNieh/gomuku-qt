@@ -15,7 +15,7 @@ public:
     Chessboard();
     int setChess(QPoint pos, int role);
     int getChess(QPoint pos);
-    std::queue<Chess> generateNextStep();
+    //std::queue<Chess> generateNextStep();
     int evaluateSituation();
     bool hasNeighbor(QPoint pos, int distance, int count);
     int scorePoint(QPoint pos, int role);
@@ -33,5 +33,5 @@ enum Score
     BLOCKED_TWO = 10,
     BLOCKED_THREE = 100,
     BLOCKED_FOUR = 10000
-}
+};
 #endif // CHESSBOARD_H
