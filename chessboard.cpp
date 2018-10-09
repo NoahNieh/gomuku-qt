@@ -6,9 +6,7 @@ Chessboard::Chessboard()
     {
         for(int j = 0; j<15; j++)
         {
-            chessboard[i][j] = 0;
-            scoreOfComputer[i][j] = 0;
-            scoreOfHuman[i][j] = 0;
+            this->chessboard[i][j] = 0;
         }
     }
 }
@@ -28,8 +26,9 @@ int Chessboard::getChess(QPoint pos)
 }
 
 
-int Chessboard::evaluateSituation()
+int Chessboard::evaluateSituation(int role)
 {
+    int currentScore = 0;
     QPoint pos;
     for(int i = 0; i<15; i++)
     {
@@ -37,27 +36,10 @@ int Chessboard::evaluateSituation()
         for(int j = 0; j<15; j++)
         {
             pos.setY(j);
-            if(chessboard[i][j] == 0)
-            {
-                if(hasNeighbor(pos,2,2)){
-                    scoreOfComputer[i][j] = scorePoint(pos,1);
-                    scoreOfHuman[i][j] = scorePoint(pos,2);
-                }
-            }
-            else if(chessboard[i][j] == 1)
-            {
-                scoreOfComputer[i][j] = scorePoint(pos,1);
-                scoreOfHuman[i][j] = 0;
-            }
-            else if(chessboard[i][j] == 2)
-            {
-                scoreOfComputer[i][j] = 0;
-                scoreOfHuman[i][j] = scorePoint(pos,2);
-            }
-
+            currentScore += scorePoint(pos, role);
         }
     }
-    return 0;
+    return currentScore;
 }
 
 bool Chessboard::hasNeighbor(QPoint pos, int distance, int count)

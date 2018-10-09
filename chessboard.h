@@ -9,14 +9,12 @@ class Chessboard
 {
 private:
     int chessboard[15][15];
-    int scoreOfComputer[15][15];
-    int scoreOfHuman[15][15];
 public:
     Chessboard();
     int setChess(QPoint pos, int role);
     int getChess(QPoint pos);
-    //std::queue<Chess> generateNextStep();
-    int evaluateSituation();
+    std::queue<Chess> generateNextStep();
+    int evaluateSituation(int role);
     bool hasNeighbor(QPoint pos, int distance, int count);
     int scorePoint(QPoint pos, int role);
     int countToScore(int count, int block, int empty);
