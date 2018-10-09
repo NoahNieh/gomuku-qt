@@ -6,7 +6,7 @@ Chessboard::Chessboard()
     {
         for(int j = 0; j<15; j++)
         {
-            this->chessboard[i][j] = 0;
+            chessboard[i][j] = 0;
             scoreOfComputer[i][j] = 0;
             scoreOfHuman[i][j] = 0;
         }
@@ -85,7 +85,7 @@ bool Chessboard::hasNeighbor(QPoint pos, int distance, int count)
 
 int Chessboard::scorePoint(QPoint pos, int role)
 {
-    int tatolScore = 0;
+    int totalScore = 0;
     int count = 1;
     int block = 0;
     int empty = -1;
@@ -100,7 +100,7 @@ int Chessboard::scorePoint(QPoint pos, int role)
         }
         if(chessboard[pos.x()][j] == 0)
         {
-            if(empty == -1 && i < 14 && chessboard[pos.x()][j+1] == role){
+            if(empty == -1 && j < 14 && chessboard[pos.x()][j+1] == role){
                 empty = count;
                 continue;
             }
@@ -130,7 +130,7 @@ int Chessboard::scorePoint(QPoint pos, int role)
         }
         if(chessboard[pos.x()][j] == 0)
         {
-            if(empty == -1 && i > 0 && chessboard[pos.x()][j-1] == role){
+            if(empty == -1 && j > 0 && chessboard[pos.x()][j-1] == role){
                 empty = 0;
                 continue;
             }
@@ -155,7 +155,7 @@ int Chessboard::scorePoint(QPoint pos, int role)
         }
     }
 
-    tatolScore += countToScore(count, block, empty);
+    totalScore += countToScore(count, block, empty);
 
 
     //-
@@ -227,7 +227,7 @@ int Chessboard::scorePoint(QPoint pos, int role)
         }
     }
 
-    tatolScore += countToScore(count, block, empty);
+    totalScore += countToScore(count, block, empty);
 
 
     // \
@@ -269,7 +269,7 @@ int Chessboard::scorePoint(QPoint pos, int role)
 
     for(int i = 1;;i++)
     {
-        x = pos.x()-i, y = pos.y()-i;
+        int x = pos.x()-i, y = pos.y()-i;
         if(x < 0 || y < 0)
         {
             block++;
@@ -303,7 +303,7 @@ int Chessboard::scorePoint(QPoint pos, int role)
         }
     }
 
-    tatolScore += countToScore(count, block, empty);
+    totalScore += countToScore(count, block, empty);
 
 
     // /
@@ -345,7 +345,7 @@ int Chessboard::scorePoint(QPoint pos, int role)
 
     for(int i = 1;;i++)
     {
-        int x = pos.x()-1; y = pos.y()+1;
+        int x = pos.x()-1, y = pos.y()+1;
         if(x < 0 || y < 0 || x >14 || y > 14)
         {
             block++;
@@ -379,9 +379,9 @@ int Chessboard::scorePoint(QPoint pos, int role)
         }
     }
 
-   tatolScore += countToScore(count, block, empty);
+    totalScore += countToScore(count, block, empty);
 
-
+    return totalScore;
 }
 
 int Chessboard::countToScore(int count, int block, int empty)
