@@ -23,7 +23,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
-    if((event->pos().x() < 30 || event->pos().x() > 783 || event->pos().y() < 30 || event->pos().y() > 784) && event->button() == Qt::LeftButton)
+    if((event->pos().x() < 30 || event->pos().x() > 736 || event->pos().y() < 30 || event->pos().y() > 736) && event->button() == Qt::LeftButton)
     {
         is_drag = true;
         mouse_position = event->globalPos() - this->pos();
@@ -44,7 +44,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     //棋盘外
-    if(event->pos().x() < 30 || event->pos().x() > 783 || event->pos().y() < 30 || event->pos().y() > 784)
+    if(event->pos().x() < 30 || event->pos().x() > 736 || event->pos().y() < 30 || event->pos().y() > 736)
     {
         is_drag = false;
         return;

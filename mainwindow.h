@@ -6,7 +6,8 @@
 #include <QPaintEvent>
 #include <judge.h>
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
