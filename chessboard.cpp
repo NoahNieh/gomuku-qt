@@ -1,5 +1,6 @@
 #include "chessboard.h"
 
+
 Chessboard::Chessboard()
 {
     for(int i = 0; i < 15; i++)
@@ -566,15 +567,82 @@ int Chessboard::countToScore(int count, int block, int empty)
     return 0;
 }
 
+int Chessboard::compare(std::pair<QPoint, int> pair1, std::pair<QPoint, int> pair2)
+{
+    return pair2.second < pair1.second;
+}
 
 
 
+std::vector<std::pair<QPoint, int> > Chessboard::generateNextStep(int role)
+{
+    int distance = 2;
+    std::vector<std::pair<QPoint, int> > screenedPoint;
+    QPoint attackPoint;
+    QPoint defendPoint;
+    int vis[15][15] = {{0}};
+    int startX1 = attackPoint.x() - distance;
+    int endX1 = attackPoint.x() + distance;
+    int startY1 = attackPoint.y() - distance;
+    int endY1 = attackPoint.y() + distance;
+
+    int startX2 = defendPoint.x() - distance;
+    int endX2 = defendPoint.x() + distance;
+    int startY2 = defendPoint.y() - distance;
+    int endY2 = defendPoint.y() + distance;
+
+    //attackPoint's
+    for(int i = startX1; i <= endX1; i++)
+    {
+        if(i < 0 || i >= 15) continue;
+        for(int j = startY1; j <= endY1 && j < startY2; j++)
+        {
+            if(j < 0 || j >= 15) continue;
+            if(i == attackPoint.x() && j == attackPoint.y()) continue;
+            QPoint point;
+            point.setX(i);
+            point.setY(j);
+
+            if(vis[i][j] == 0)
+            {
+                vis[i][j] = 1;
+                std::pair<QPoint, int> pairs(point, scorePoint(point, role));
+                screenedPoint.push_back(pairs);
+            }
+        }
+    }
 
 
+    //defendPoint's
+    for(int i = startX2; i <= endX2; i++)
+    {
+        if(i < 0 || i >= 15) continue;
+        for(int j = startY2; j <= endY2; j++)
+        {
+            if(j < 0 || j >= 15) continue;
+            if(i == attackPoint.x() && j == attackPoint.y()) continue;
+            QPoint point;
+            point.setX(i);
+            point.setY(j);
 
+            if(vis[i][j] == 0)
+            {
+                vis[i][j] = 1;
+                std::pair<QPoint, int> pairs(point, scorePoint(point, role));
+                screenedPoint.push_back(pairs);
+            }
+            std::pair<QPoint, int> pairs(point, scorePoint(point, role));
+            screenedPoint.push_back(pairs);
+        }
+    }
 
+    //sorting
+    std::sort(screenedPoint.begin(), screenedPoint.end(), compare);
 
+    //
 
+    return screenedPoint;
+}
 
 
 
