@@ -71,7 +71,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     QPixmap pix;
-    pix.load(":/image/cb.png");
+    pix.load(":/image/image/cb.png");
     painter.drawPixmap(0, 0, pix.width(), pix.height(), pix);
     Chessboard *chessboard = judge->getChessboard();
     if(chessboard == NULL) return;

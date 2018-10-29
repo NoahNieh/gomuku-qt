@@ -14,17 +14,34 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QPushButton
+{	
+	
+	color: rgb(222, 216, 35);
+	border-image: url(:/image/image/button.png);
+}
+QPushButton:hover
+{
+	
+	border-image: url(:/image/image/button_hover.png);
+}
+QPushButton:pressed
+{
+border-image: url(:/image/image/button_pressed.png);
+}</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="playWithCom">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>130</y>
-      <width>93</width>
-      <height>28</height>
+      <x>780</x>
+      <y>120</y>
+      <width>201</width>
+      <height>51</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>playWithCom</string>
@@ -33,10 +50,10 @@
    <widget class="QPushButton" name="playWithHum">
     <property name="geometry">
      <rect>
-      <x>820</x>
+      <x>780</x>
       <y>220</y>
-      <width>93</width>
-      <height>28</height>
+      <width>201</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="text">
@@ -46,10 +63,10 @@
    <widget class="QPushButton" name="exit">
     <property name="geometry">
      <rect>
-      <x>820</x>
-      <y>310</y>
-      <width>93</width>
-      <height>28</height>
+      <x>780</x>
+      <y>320</y>
+      <width>201</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="text">
