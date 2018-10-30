@@ -58,10 +58,20 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
     QPoint pos = event->pos();
     pos.setX((pos.x()-8) / 50);
     pos.setY((pos.y()-9) / 50);
-
-    if(judge->putChess(pos) == 1)
+    int flag;
+    if((flag = this->judge->putChess(pos)) == 1)
     {
-        judge->resetJudge();
+        this->judge->resetJudge();
+    }
+    update();
+    if(this->judge->getGameMode() == 1 && flag != -1)
+    {
+        QPoint next_step = this->judge->putChessAi();
+        if(this->judge->putChess(next_step) == 1)
+        {
+            this->judge->resetJudge();
+        }
+
     }
     update();
     return;
@@ -101,10 +111,16 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
 void MainWindow::on_playWithHum_clicked()
 {
-    judge->playWithHum();
+    this->judge->playWithHum();
 }
 
 void MainWindow::on_exit_clicked()
 {
     this->close();
+}
+
+void MainWindow::on_playWithCom_clicked()
+{
+    this->judge->playWithCom(1);
+    update();
 }

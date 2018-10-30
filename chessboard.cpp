@@ -12,9 +12,21 @@ Chessboard::Chessboard()
     }
 }
 
+Chessboard::~Chessboard()
+{
+}
+
 int Chessboard::setChess(QPoint pos, int role)
 {
     chessboard[pos.x()][pos.y()] = role;
+    if(role)
+    {
+        this->history.push(pos);
+    }
+    else
+    {
+        this->history.pop();
+    }
     return 0;
 }
 
@@ -36,8 +48,12 @@ int Chessboard::evaluateSituation(int role)
         pos.setX(i);
         for(int j = 0; j < 15; j++)
         {
+            int tmp;
             pos.setY(j);
-            currentScore += scorePoint(pos, role);
+            tmp = scorePoint(pos, role);
+            currentScore += tmp; //scorePoint(pos, role);
+            tmp = scorePoint(pos, role==1?2:1);
+            currentScore -= tmp; //scorePoint(pos, role==1?2:1);
         }
     }
     return currentScore;
@@ -334,7 +350,7 @@ int Chessboard::scorePoint(QPoint pos, int role)
 
     for(int i = 1;; i++)
     {
-        int x = pos.x() - 1, y = pos.y() + 1;
+        int x = pos.x() - i, y = pos.y() + i;
         if(x < 0 || y < 0 || x > 14 || y > 14)
         {
             block++;
@@ -640,7 +656,7 @@ bool Chessboard::isPointOverThree(QPoint pos, int role)
 
     for(int i = 1;; i++)
     {
-        int x = pos.x() - 1, y = pos.y() + 1;
+        int x = pos.x() - i, y = pos.y() + i;
         if(x < 0 || y < 0 || x > 14 || y > 14)
         {
             block++;
@@ -1076,10 +1092,27 @@ int Chessboard::compare(std::pair<QPoint, int> pair1, std::pair<QPoint, int> pai
 
 std::vector<std::pair<QPoint, int> > Chessboard::generateNextStep(int role, bool considerCheckmate)
 {
-    int distance = 2;
+    int distance = 5; //为2的时候略弱智
     std::vector<std::pair<QPoint, int> > screenedPoint;
+//    noahnieh: 只行了一步棋的时候的情况 没有考虑
+//    QPoint attackPoint = this->history->top();
+//    this->history->pop();
+//    QPoint defendPoint = this->history->top();
+//    this->history->push(attackPoint);
     QPoint attackPoint;
     QPoint defendPoint;
+    if(this->history.size()<2)
+    {
+        attackPoint = this->history.top();
+        defendPoint = this->history.top();
+    }
+    else
+    {
+        attackPoint = this->history.top();
+        this->history.pop();
+        defendPoint = this->history.top();
+        this->history.push(attackPoint);
+    }
     int vis[15][15] = {{0}};
     int startX1 = attackPoint.x() - distance;
     int endX1 = attackPoint.x() + distance;
@@ -1097,6 +1130,7 @@ std::vector<std::pair<QPoint, int> > Chessboard::generateNextStep(int role, bool
         if(i < 0 || i >= 15) continue;
         for(int j = startY1; j <= endY1 && j < startY2; j++)
         {
+            if(chessboard[i][j]) continue;
             if(j < 0 || j >= 15) continue;
             if(i == attackPoint.x() && j == attackPoint.y()) continue;
             QPoint point;
@@ -1131,9 +1165,11 @@ std::vector<std::pair<QPoint, int> > Chessboard::generateNextStep(int role, bool
     //defendPoint's
     for(int i = startX2; i <= endX2; i++)
     {
+
         if(i < 0 || i >= 15) continue;
         for(int j = startY2; j <= endY2; j++)
         {
+            if(chessboard[i][j]) continue;
             if(j < 0 || j >= 15) continue;
             if(i == attackPoint.x() && j == attackPoint.y()) continue;
             QPoint point;

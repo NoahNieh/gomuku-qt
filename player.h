@@ -6,15 +6,15 @@
 
 class Player
 {
-private:
-    int side;
+protected:
+    int role;
     int time;
     int win;
 public:
     Player();
     ~Player();
 
-//    virtual int put(Chessboard chessboard) = 0;
+    virtual QPoint generateNextStep(Chessboard chessboard,int difficulty, int role);
 };
 
 #endif // PLAYER_H

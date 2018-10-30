@@ -33,6 +33,7 @@ protected:
 private slots:
     void on_playWithHum_clicked();
     void on_exit_clicked();
+    void on_playWithCom_clicked();
 };
 
 #endif // MAINWINDOW_H

@@ -31,47 +31,66 @@ border-image: url(:/image/image/button_pressed.png);
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="playWithCom">
+   <widget class="QWidget" name="menu_buttons" native="true">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>780</x>
-      <y>120</y>
-      <width>201</width>
-      <height>51</height>
+      <x>760</x>
+      <y>20</y>
+      <width>230</width>
+      <height>700</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>playWithCom</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="playWithHum">
-    <property name="geometry">
-     <rect>
-      <x>780</x>
-      <y>220</y>
-      <width>201</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>playWithHum</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="exit">
-    <property name="geometry">
-     <rect>
-      <x>780</x>
-      <y>320</y>
-      <width>201</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Exit</string>
-    </property>
+    <widget class="QPushButton" name="exit">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>430</y>
+       <width>201</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Exit</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="playWithCom">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>230</y>
+       <width>201</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>playWithCom</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="playWithHum">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>330</y>
+       <width>201</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>playWithHum</string>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>

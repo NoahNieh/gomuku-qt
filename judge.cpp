@@ -17,9 +17,9 @@ int Judge::getTerm()
     return this->term;
 }
 
-Player Judge::getPlayer(int n)
+Player* Judge::getPlayer(int n)
 {
-    return *(this->player[n]);
+    return this->player[n];
 }
 
 int Judge::getGameMode()
@@ -42,13 +42,39 @@ int Judge::putChess(QPoint pos)
 
     chessboard->setChess(pos, term);
     if(isWin(pos)) return 1;
-    if(term == 1)
+    this->term = this->term == 1 ? 2 : 1;
+
+    return 0;
+}
+
+QPoint Judge::putChessAi()
+{
+    return this->player[this->term-1]->generateNextStep(*(this->chessboard), 4, this->term);
+}
+
+int Judge::playWithCom(int go_first)
+{
+    if(go_first == 1)
     {
-        term = 2;
+        player[0] = new Human(1);
+        player[1] = new Ai(2);
     }
-    else if(term == 2)
+    else
     {
-        term = 1;
+        player[0] = new Ai(1);
+        player[1] = new Human(2);
+    }
+    if(chessboard != NULL)
+    {
+        delete chessboard;
+    }
+    this->chessboard = new Chessboard();
+    this->game_mode = 1;
+    this->term = 1;
+    if(go_first == 2)
+    {
+        this->chessboard->setChess(QPoint(7, 7), 1);
+        this->term = 2;
     }
     return 0;
 }
@@ -61,7 +87,7 @@ int Judge::playWithHum()
     player[1] = new Human();
     if(chessboard != NULL)
     {
-        delete [] chessboard;
+        delete chessboard;
     }
     chessboard = new Chessboard();
     game_mode = 2;
@@ -115,7 +141,7 @@ int Judge::isWin(QPoint pos)
 
 Judge::~Judge()
 {
-    delete[] chessboard;
+    delete chessboard;
     delete player[0];
     delete player[1];
 
