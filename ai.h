@@ -17,8 +17,8 @@ public:
     Ai();
     Ai(int role);
     QPoint generateNextStep(Chessboard chessboard,int difficulty, int role);
-    grade min_alphabeta(Chessboard chessboard, int depth, int alpha, int beta, int role, bool considerDeep);
-    grade max_alphabeta(Chessboard chessboard, int depth, int alpha, int beta, int role, bool considerDeep, bool firstStep);
+    grade min_alphabeta(Chessboard chessboard, int depth, int alpha, int beta, int role, grade best);
+    grade max_alphabeta(Chessboard chessboard, int depth, int alpha, int beta, int role, bool firstStep, grade best);
     grade iterative_deepening(Chessboard chessboard,int depth, int role);
 };
 
