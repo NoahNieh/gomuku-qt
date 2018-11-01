@@ -25,67 +25,65 @@ QPoint Ai::generateNextStep(Chessboard chessboard,int difficulty, int role)
     return best.pos;
 }
 
-grade Ai::min_alphabeta(Chessboard chessboard, int depth, int alpha, int beta, int role, grade best)
+grade Ai::min_alphabeta(Chessboard chessboard, int depth, int alpha, int beta, int role)
+{
+    grade best;
+    best.score = INT_MAX;
+    std::vector<std::pair<QPoint, int> > nextstep = chessboard.generateNextStep(role, false);
+    for(std::vector<std::pair<QPoint, int> >::iterator iter = nextstep.begin(); iter != nextstep.end(); iter++)
     {
-        best.score = INT_MAX;
-        std::vector<std::pair<QPoint, int> > nextstep = chessboard.generateNextStep(role, false);
-        for(std::vector<std::pair<QPoint, int> >::iterator iter = nextstep.begin(); iter != nextstep.end(); iter++)
+        chessboard.setChess(iter->first, role);
+        grade tmp = max_alphabeta(chessboard, depth-1, alpha, beta, role == 1 ? 2:1, false);
+        chessboard.setChess(iter->first, 0);
+        if (tmp.score < best.score)
         {
-            chessboard.setChess(iter->first, role);
-            grade tmp = max_alphabeta(chessboard, depth-1, alpha, beta, role == 1 ? 2:1, false, best);
-            chessboard.setChess(iter->first, 0);
-            if (tmp.score < best.score)
-            {
-                best = tmp;
-                alpha = tmp.score;
-            }
-            if (tmp.score < beta)
-            {
-                break;
-            }
+            best = tmp;
+            alpha = tmp.score;
         }
-        return best;
+        if (tmp.score < beta)
+        {
+            break;
+        }
     }
+    return best;
+}
 
 
-grade Ai::max_alphabeta(Chessboard chessboard, int depth, int alpha, int beta, int role, bool firstStep, grade best)
+grade Ai::max_alphabeta(Chessboard chessboard, int depth, int alpha, int beta, int role, bool firstStep)
+{
+    grade best;
+    grade tmp;
+//        qDebug() << res;
+    best.score = INT_MIN;
+    if(depth <= 0)
     {
-        grade tmp;
         int res = chessboard.evaluateSituation(role);
-        qDebug() << res;
-        best.score = INT_MIN;
-        if(depth <= 0)
-        {
-            best.score = res;
-            return best;
-        }
-        std::vector<std::pair<QPoint, int> > nextstep = chessboard.generateNextStep(role, false);
-        for(std::vector<std::pair<QPoint, int> >::iterator iter = nextstep.begin(); iter != nextstep.end(); iter++)
-        {
-            chessboard.setChess(iter->first, role);
-            if(firstStep == true)
-            {
-                grade firstStepTmp;
-                firstStepTmp.pos = iter->first;
-                firstStepTmp.score = INT_MIN;
-                tmp = min_alphabeta(chessboard, depth-1, alpha, beta, role == 1 ? 2:1, firstStepTmp);
-            }
-            else{
-                tmp = min_alphabeta(chessboard, depth-1, alpha, beta, role == 1 ? 2:1, best);
-                chessboard.setChess(iter->first, 0);
-                if (tmp.score > best.score)
-                {
-                    best = tmp;
-                    beta = tmp.score;
-                }
-                if (tmp.score > alpha)
-                {
-                    break;
-                }
-            }
-        }
+        best.score = res;
         return best;
     }
+    std::vector<std::pair<QPoint, int> > nextstep = chessboard.generateNextStep(role, false);
+    for(std::vector<std::pair<QPoint, int> >::iterator iter = nextstep.begin(); iter != nextstep.end(); iter++)
+    {
+        chessboard.setChess(iter->first, role);
+        tmp = min_alphabeta(chessboard, depth-1, alpha, beta, role == 1 ? 2:1);
+        chessboard.setChess(iter->first, 0);
+
+        if (tmp.score > best.score)
+        {
+            best = tmp;
+            beta = tmp.score;
+            if(firstStep)
+            {
+                best.pos = iter->first;
+            }
+        }
+        if (tmp.score > alpha/* &&!firstStep*/)
+        {
+            break;
+        }
+    }
+    return best;
+}
 
 
 
@@ -95,7 +93,7 @@ grade Ai::iterative_deepening(Chessboard chessboard, int depth, int role)
     best.score = INT_MIN;
     for(int i = 2;i <= depth; i += 2)
     {
-      tmp = max_alphabeta(chessboard, i, INT_MIN, INT_MAX, role, true, best);
+      tmp = max_alphabeta(chessboard, i, INT_MIN, INT_MAX, role, true);
       if(tmp.score > best.score)
           best = tmp;
     }

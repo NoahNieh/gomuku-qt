@@ -48,12 +48,11 @@ int Chessboard::evaluateSituation(int role)
         pos.setX(i);
         for(int j = 0; j < 15; j++)
         {
-            int tmp;
             pos.setY(j);
-            tmp = scorePoint(pos, role);
-            currentScore += tmp; //scorePoint(pos, role);
-            tmp = scorePoint(pos, role==1?2:1);
-            currentScore -= tmp; //scorePoint(pos, role==1?2:1);
+            if(chessboard[i][j] == role)
+                currentScore += scorePoint(pos, role);
+            else if(chessboard[i][j] == (role==1?2:1))
+                currentScore -= scorePoint(pos, role==1?2:1);
         }
     }
     return currentScore;
@@ -1152,9 +1151,8 @@ std::vector<std::pair<QPoint, int> > Chessboard::generateNextStep(int role, bool
                 else
                 {
                     vis[i][j] = 1;
-                    std::pair<QPoint, int> pairs(point, scorePoint(point, role));
-                    screenedPoint.push_back(pairs);
-
+                    screenedPoint.push_back(std::pair<QPoint, int>(point, scorePoint(point, role)));
+                    screenedPoint.push_back(std::pair<QPoint, int>(point, scorePoint(point, role==1?2:1)));
                 }
             }
 
@@ -1191,8 +1189,8 @@ std::vector<std::pair<QPoint, int> > Chessboard::generateNextStep(int role, bool
                 else
                 {
                     vis[i][j] = 1;
-                    std::pair<QPoint, int> pairs(point, scorePoint(point, role));
-                    screenedPoint.push_back(pairs);
+                    screenedPoint.push_back(std::pair<QPoint, int>(point, scorePoint(point, role)));
+                    screenedPoint.push_back(std::pair<QPoint, int>(point, scorePoint(point, role==1?2:1)));
 
                 }
             }
