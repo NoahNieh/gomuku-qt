@@ -49,7 +49,7 @@ int Judge::putChess(QPoint pos)
 
 QPoint Judge::putChessAi()
 {
-    return this->player[this->term-1]->generateNextStep(*(this->chessboard), 4, this->term);
+    return this->player[this->term-1]->generateNextStep(*(this->chessboard), 50, this->term);
 }
 
 int Judge::playWithCom(int go_first)

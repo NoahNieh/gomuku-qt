@@ -18,6 +18,7 @@ public:
     ~Chessboard();
     int setChess(QPoint pos, int role);
     int getChess(QPoint pos);
+    std::stack<QPoint> getHistory();
     std::vector<std::pair<QPoint, int> > generateNextStep(int role, bool considerCheckmate);
     int evaluateSituation(int role);
     bool hasNeighbor(QPoint pos, int distance, int count);

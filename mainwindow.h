@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <judge.h>
+#include <stack>
 
 namespace Ui
 {

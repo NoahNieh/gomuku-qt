@@ -38,6 +38,11 @@ int Chessboard::getChess(QPoint pos)
     return this->chessboard[pos.x()][pos.y()];
 }
 
+std::stack<QPoint> Chessboard::getHistory()
+{
+    return this->history;
+}
+
 
 int Chessboard::evaluateSituation(int role)
 {
@@ -1091,7 +1096,7 @@ int Chessboard::compare(std::pair<QPoint, int> pair1, std::pair<QPoint, int> pai
 
 std::vector<std::pair<QPoint, int> > Chessboard::generateNextStep(int role, bool considerCheckmate)
 {
-    int distance = 5; //为2的时候略弱智
+    int distance = 10; //为2的时候略弱智
     std::vector<std::pair<QPoint, int> > screenedPoint;
 //    noahnieh: 只行了一步棋的时候的情况 没有考虑
 //    QPoint attackPoint = this->history->top();

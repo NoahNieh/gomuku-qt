@@ -20,7 +20,6 @@ public:
     int getGameMode();
     Chessboard* getChessboard();
     int putChess(QPoint pos);
-    int removeChess(QPoint pos);
     QPoint putChessAi();
     int playWithCom(int go_first);
     int playWithHum();

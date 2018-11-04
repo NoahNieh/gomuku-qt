@@ -86,24 +86,44 @@ void MainWindow::paintEvent(QPaintEvent *event)
     Chessboard *chessboard = judge->getChessboard();
     if(chessboard == NULL) return;
     QPoint pos;
-    for(pos.setX(0); pos.x()<15; pos.setX(pos.x()+1))
+//    for(pos.setX(0); pos.x()<15; pos.setX(pos.x()+1))
+//    {
+//        for(pos.setY(0); pos.y()<15; pos.setY(pos.y()+1))
+//        {
+//            if(chessboard->getChess(pos) != 0)
+//            {
+//                if(chessboard->getChess(pos) == 1)
+//                {
+//                    painter.setPen(QColor(Qt::black));
+//                    painter.setBrush(QBrush(Qt::black));
+//                }
+//                else
+//                {
+//                    painter.setPen(QColor(Qt::white));
+//                    painter.setBrush(QBrush(Qt::white));
+//                }
+//                painter.drawEllipse(22+pos.x()*50, 23+pos.y()*50, 23, 23);
+//            }
+//        }
+//    }
+    for(std::stack<QPoint> tmp = chessboard->getHistory(); !tmp.empty(); tmp.pop())
     {
-        for(pos.setY(0); pos.y()<15; pos.setY(pos.y()+1))
+        if(chessboard->getChess(tmp.top()) != 0)
         {
-            if(chessboard->getChess(pos) != 0)
+            QPoint pos = QPoint(tmp.top().x(), tmp.top().y());
+            if(chessboard->getChess(tmp.top()) == 1)
             {
-                if(chessboard->getChess(pos) == 1)
-                {
-                    painter.setPen(QColor(Qt::black));
-                    painter.setBrush(QBrush(Qt::black));
-                }
-                else
-                {
-                    painter.setPen(QColor(Qt::white));
-                    painter.setBrush(QBrush(Qt::white));
-                }
-                painter.drawEllipse(22+pos.x()*50, 23+pos.y()*50, 23, 23);
+                painter.setPen(QColor(Qt::black));
+                painter.setBrush(QBrush(Qt::black));
             }
+            else
+            {
+                painter.setPen(QColor(Qt::white));
+                painter.setBrush(QBrush(Qt::white));
+            }
+            painter.drawEllipse(22+pos.x()*50, 23+pos.y()*50, 23, 23);
+            painter.setPen(QColor(Qt::red));
+            painter.drawText(22+pos.x()*50+7, 23+pos.y()*50+15, QString::number(tmp.size(),10));
         }
     }
     return;

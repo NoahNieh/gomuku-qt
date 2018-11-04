@@ -6,7 +6,7 @@
 
 class Player
 {
-protected:
+private:
     int role;
     int time;
     int win;
