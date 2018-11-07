@@ -3,6 +3,7 @@
 #include "judge.h"
 #include "ai.h"
 #include <QDebug>
+#include <assert.h>
 #include <QPainter>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -13,7 +14,56 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setWindowOpacity(0.95);
-    judge = new Judge();
+    this->ui->winner->hide();
+    this->ui->winner->setAttribute(Qt::WA_TranslucentBackground, true);
+    this->effect=new QGraphicsOpacityEffect();
+    this->effect->setOpacity(this->opacity);
+    this->ui->winner->setGraphicsEffect(this->effect);
+    this->judge = new Judge();
+
+    connect(&(this->timer), SIGNAL(timeout()), this, SLOT(fadeInFadeOut()));
+    connect(&(this->delay), SIGNAL(timeout()), this, SLOT(startFadeOut()));
+
+}
+
+void MainWindow::fadeInFadeOut()
+{
+//    qDebug() << this->opacity;
+    if(this->opacity < 1 && this->fade_in == true)
+    {
+        this->opacity += 0.01;
+        this->ui->winner->setGeometry(280-140*this->opacity, 680-140*this->opacity, 441-200*this->opacity, 271-200*this->opacity);
+        this->ui->winner->setFont(QFont("楷体", 135-100*this->opacity, QFont::Bold));
+        this->effect->setOpacity(this->opacity);
+        this->ui->winner->setGraphicsEffect(this->effect);
+    }
+    else if(this->opacity > 0 && this->fade_in == false)
+    {
+        this->opacity -= 0.01;
+        this->ui->winner->setGeometry(280-140*this->opacity, 680-140*this->opacity, 441-200*this->opacity, 271-200*this->opacity);
+        this->ui->winner->setFont(QFont("楷体", 135-100*this->opacity, QFont::Bold));
+        this->effect->setOpacity(this->opacity);
+        this->ui->winner->setGraphicsEffect(this->effect);
+    }
+    else if(this->opacity > 1)
+    {
+        this->fade_in = false;
+        this->timer.stop();
+        this->delay.start(2000);
+    }
+    else if(this->opacity < 0)
+    {
+        this->fade_in = true;
+        this->judge->setWinner(0);
+        this->ui->winner->hide();
+        this->timer.stop();
+    }
+}
+
+void MainWindow::startFadeOut()
+{
+    this->timer.start(4);
+    this->delay.stop();
 }
 
 MainWindow::~MainWindow()
@@ -43,6 +93,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 // (33,34)
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
+//    qDebug() << event->pos();
     //棋盘外
     if(event->pos().x() < 30 || event->pos().x() > 736 || event->pos().y() < 30 || event->pos().y() > 736)
     {
@@ -85,27 +136,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.drawPixmap(0, 0, pix.width(), pix.height(), pix);
     Chessboard *chessboard = judge->getChessboard();
     if(chessboard == NULL) return;
-    QPoint pos;
-//    for(pos.setX(0); pos.x()<15; pos.setX(pos.x()+1))
-//    {
-//        for(pos.setY(0); pos.y()<15; pos.setY(pos.y()+1))
-//        {
-//            if(chessboard->getChess(pos) != 0)
-//            {
-//                if(chessboard->getChess(pos) == 1)
-//                {
-//                    painter.setPen(QColor(Qt::black));
-//                    painter.setBrush(QBrush(Qt::black));
-//                }
-//                else
-//                {
-//                    painter.setPen(QColor(Qt::white));
-//                    painter.setBrush(QBrush(Qt::white));
-//                }
-//                painter.drawEllipse(22+pos.x()*50, 23+pos.y()*50, 23, 23);
-//            }
-//        }
-//    }
+    QFont font("Lucida Console", 9, QFont::Bold);
+    painter.setFont(font);
     for(std::stack<QPoint> tmp = chessboard->getHistory(); !tmp.empty(); tmp.pop())
     {
         if(chessboard->getChess(tmp.top()) != 0)
@@ -121,17 +153,41 @@ void MainWindow::paintEvent(QPaintEvent *event)
                 painter.setPen(QColor(Qt::white));
                 painter.setBrush(QBrush(Qt::white));
             }
-            painter.drawEllipse(22+pos.x()*50, 23+pos.y()*50, 23, 23);
+            painter.drawEllipse(33+pos.x()*50-20, 33+pos.y()*50-20, 40, 40);
             painter.setPen(QColor(Qt::red));
-            painter.drawText(22+pos.x()*50+7, 23+pos.y()*50+15, QString::number(tmp.size(),10));
+            painter.drawText(33+pos.x()*50-25, 33+pos.y()*50-25, 50, 50,Qt::AlignCenter ,QString::number(tmp.size(),10));
         }
     }
+
+    //win info
+    if(this->judge->getWinner() != 0)
+    {
+
+        if(this->judge->getWinner() == 1)
+        {
+            this->ui->winner->setText("黑棋胜利");
+        }
+        else
+        {
+            this->ui->winner->setText("白棋胜利");
+        }
+        this->ui->winner->show();
+        this->timer.start(4);
+
+    }
+
     return;
 }
 
 void MainWindow::on_playWithHum_clicked()
 {
     this->judge->playWithHum();
+    this->timer.stop();
+    this->delay.stop();
+    this->ui->winner->hide();
+    this->opacity = 0;
+    this->fade_in = true;
+    update();
 }
 
 void MainWindow::on_exit_clicked()
@@ -142,5 +198,10 @@ void MainWindow::on_exit_clicked()
 void MainWindow::on_playWithCom_clicked()
 {
     this->judge->playWithCom(1);
+    this->timer.stop();
+    this->delay.stop();
+    this->ui->winner->hide();
+    this->opacity = 0;
+    this->fade_in = true;
     update();
 }

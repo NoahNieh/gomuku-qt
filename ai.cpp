@@ -91,13 +91,13 @@ grade Ai::iterative_deepening(Chessboard chessboard, int depth, int role)
 {
     grade tmp, best;
     best.score = INT_MIN;
-//    for(int i = 2;i <= depth; i += 2)
-//    {
-//      tmp = max_alphabeta(chessboard, i, INT_MIN, INT_MAX, role, true);
-//      if(tmp.score > best.score)
-//          best = tmp;
-//    }
-    best = max_alphabeta(chessboard, depth, INT_MIN, INT_MAX, role, true);
+    for(int i = 2;i <= depth; i += 2)
+    {
+      tmp = max_alphabeta(chessboard, i, INT_MIN, INT_MAX, role, true);
+      if(tmp.score > best.score)
+          best = tmp;
+    }
+//    best = max_alphabeta(chessboard, depth, INT_MIN, INT_MAX, role, true);
     qDebug() << best.pos.x() << ',' << best.pos.y() << ' ' << best.score;
     return best;
 }

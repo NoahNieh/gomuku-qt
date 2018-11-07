@@ -6,13 +6,13 @@
 
 class Player
 {
-private:
+protected:
     int role;
     int time;
     int win;
 public:
     Player();
-    ~Player();
+    virtual ~Player();
 
     virtual QPoint generateNextStep(Chessboard chessboard,int difficulty, int role);
 };

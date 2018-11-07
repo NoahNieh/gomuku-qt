@@ -3,13 +3,24 @@
 #include "human.h"
 #include <QDebug>
 
+int Judge::getWinner() const
+{
+    return winner;
+}
+
+void Judge::setWinner(int value)
+{
+    winner = value;
+}
+
 Judge::Judge()
 {
-    chessboard = NULL;
-    term = 0;
-    game_mode = 0;
-    player[0] = NULL;
-    player[1] = NULL;
+    this->chessboard = NULL;
+    this->term = 0;
+    this->winner = 0;
+    this->game_mode = 0;
+    this->player[0] = NULL;
+    this->player[1] = NULL;
 }
 
 int Judge::getTerm()
@@ -49,7 +60,7 @@ int Judge::putChess(QPoint pos)
 
 QPoint Judge::putChessAi()
 {
-    return this->player[this->term-1]->generateNextStep(*(this->chessboard), 50, this->term);
+    return this->player[this->term-1]->generateNextStep(*(this->chessboard), 10, this->term);
 }
 
 int Judge::playWithCom(int go_first)
@@ -76,6 +87,7 @@ int Judge::playWithCom(int go_first)
         this->chessboard->setChess(QPoint(7, 7), 1);
         this->term = 2;
     }
+    this->winner = 0;
     return 0;
 }
 
@@ -92,6 +104,7 @@ int Judge::playWithHum()
     chessboard = new Chessboard();
     game_mode = 2;
     term = 1;
+    this->winner = 0;
     return 0;
 }
 
@@ -135,7 +148,11 @@ int Judge::isWin(QPoint pos)
             }
         }
     }
-    if(sumOfChess == 5) return 1;
+    if(sumOfChess == 5)
+    {
+        this->winner = this->term;
+        return 1;
+    }
     else return 0;
 }
 

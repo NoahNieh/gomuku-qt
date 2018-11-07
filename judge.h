@@ -12,6 +12,7 @@ private:
     Chessboard *chessboard;
     Player *player[2];
     int term;
+    int winner;
     int game_mode; // 0, 1:ai, 2:hum
 public:
     Judge();
@@ -26,6 +27,8 @@ public:
     int resetJudge(); //tmp
     int isWin(QPoint pos);
     ~Judge();
+    int getWinner() const;
+    void setWinner(int winner);
 };
 
 #endif // JUDGE_H
