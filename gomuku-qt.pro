@@ -30,7 +30,10 @@ SOURCES += \
     chessboard.cpp \
     player.cpp \
     human.cpp \
-    ai.cpp
+    ai.cpp \
+    newjudge.cpp \
+    newhuman.cpp \
+    retract.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,7 +41,10 @@ HEADERS += \
     chessboard.h \
     player.h \
     human.h \
-    ai.h
+    ai.h \
+    newjudge.h \
+    newhuman.h \
+    retract.h
 
 FORMS += \
         mainwindow.ui
