@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <assert.h>
 #include <QPainter>
+#include <QPixmap>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -145,15 +147,21 @@ void MainWindow::paintEvent(QPaintEvent *event)
             QPoint pos = QPoint(tmp.top().x(), tmp.top().y());
             if(chessboard->getChess(tmp.top()) == 1)
             {
-                painter.setPen(QColor(Qt::black));
-                painter.setBrush(QBrush(Qt::black));
+//                painter.setPen(QColor(Qt::black));
+//                painter.setBrush(QBrush(Qt::black));
+                QPixmap pix;
+                pix.load(":/image/image/b2.png");
+                painter.drawPixmap(33+pos.x()*50-20, 33+pos.y()*50-20, 40, 40, pix);
             }
             else
             {
-                painter.setPen(QColor(Qt::white));
-                painter.setBrush(QBrush(Qt::white));
+//                painter.setPen(QColor(Qt::white));
+//                painter.setBrush(QBrush(Qt::white));
+                QPixmap pix;
+                pix.load(":/image/image/w2.png");
+                painter.drawPixmap(33+pos.x()*50-20, 33+pos.y()*50-20, 40, 40, pix);
             }
-            painter.drawEllipse(33+pos.x()*50-20, 33+pos.y()*50-20, 40, 40);
+//            painter.drawEllipse(33+pos.x()*50-20, 33+pos.y()*50-20, 40, 40);
             painter.setPen(QColor(Qt::red));
             painter.drawText(33+pos.x()*50-25, 33+pos.y()*50-25, 50, 50,Qt::AlignCenter ,QString::number(tmp.size(),10));
         }

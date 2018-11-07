@@ -5,5 +5,7 @@
         <file>image/button_hover.png</file>
         <file>image/button_pressed.png</file>
         <file>image/frame.png</file>
+        <file>image/b2.png</file>
+        <file>image/w2.png</file>
     </qresource>
 </RCC>
