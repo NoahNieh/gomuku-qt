@@ -8,8 +8,13 @@
 #include <QParallelAnimationGroup>
 #include <QTimer>
 #include <QGraphicsOpacityEffect>
+#include <QAbstractSocket>
 #include <judge.h>
+#include <network.h>
 #include <stack>
+
+class QTcpSocket;
+class QTcpServer;
 
 namespace Ui
 {
@@ -36,7 +41,14 @@ private:
     double opacity = 0;
     bool fade_in = true;
     QGraphicsOpacityEffect *effect;
+    QTcpServer *tcp_server;
+    QTcpSocket *tcp_client;
+    int client_num = 0;
+    NetWork *network;
+    quint16 block_size;
 
+signals:
+    void putChess(QPoint pos);
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -48,6 +60,13 @@ private slots:
     void on_playWithCom_clicked();
     void fadeInFadeOut();
     void startFadeOut();
+    void createServer(int port);
+    void connectServer(QString address, int port);
+    void getConnect();
+    void gameStart();
+    void sendChess(QPoint pos);
+    void readChess();
+    void on_disconnect_clicked();
 };
 
 #endif // MAINWINDOW_H

@@ -13,7 +13,8 @@ private:
     Player *player[2];
     int term;
     int winner;
-    int game_mode; // 0, 1:ai, 2:hum
+    int game_mode; // 0, 1:ai, 2:hum, 3:wait for connect
+    bool is_your_term;
 public:
     Judge();
     int getTerm();
@@ -23,12 +24,14 @@ public:
     int putChess(QPoint pos);
     QPoint putChessAi();
     int playWithCom(int go_first);
-    int playWithHum();
+    int playWithHum(int role);
     int resetJudge(); //tmp
     int isWin(QPoint pos);
     ~Judge();
     int getWinner() const;
     void setWinner(int winner);
+    bool isYourTerm() const;
+    void setGameMode(int value);
 };
 
 #endif // JUDGE_H

@@ -91,6 +91,22 @@ border-image: url(:/image/image/button_pressed.png);
       <string>playWithHum</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="disconnect">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>530</y>
+       <width>201</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>disconnect</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="winner">
     <property name="enabled">

@@ -13,6 +13,17 @@ void Judge::setWinner(int value)
     winner = value;
 }
 
+bool Judge::isYourTerm() const
+{
+    return is_your_term;
+}
+
+void Judge::setGameMode(int value)
+{
+    game_mode = value;
+}
+
+
 Judge::Judge()
 {
     this->chessboard = NULL;
@@ -54,13 +65,14 @@ int Judge::putChess(QPoint pos)
     chessboard->setChess(pos, term);
     if(isWin(pos)) return 1;
     this->term = this->term == 1 ? 2 : 1;
+    this->is_your_term = !this->is_your_term;
 
     return 0;
 }
 
 QPoint Judge::putChessAi()
 {
-    return this->player[this->term-1]->generateNextStep(*(this->chessboard), 10, this->term);
+    return this->player[this->term - 1]->generateNextStep(*(this->chessboard), 10, this->term);
 }
 
 int Judge::playWithCom(int go_first)
@@ -82,6 +94,7 @@ int Judge::playWithCom(int go_first)
     this->chessboard = new Chessboard();
     this->game_mode = 1;
     this->term = 1;
+    this->is_your_term = 1;
     if(go_first == 2)
     {
         this->chessboard->setChess(QPoint(7, 7), 1);
@@ -93,7 +106,7 @@ int Judge::playWithCom(int go_first)
 
 
 
-int Judge::playWithHum()
+int Judge::playWithHum(int role)
 {
     player[0] = new Human();
     player[1] = new Human();
@@ -104,6 +117,14 @@ int Judge::playWithHum()
     chessboard = new Chessboard();
     game_mode = 2;
     term = 1;
+    if(role == 2)
+    {
+        this->is_your_term = false;
+    }
+    else
+    {
+        this->is_your_term = true;
+    }
     this->winner = 0;
     return 0;
 }
@@ -121,17 +142,17 @@ int Judge::isWin(QPoint pos)
     int sumOfChess;
     int direction[4][2] = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
     int minus;
-    for(int i = 0; i<4; i++)
+    for(int i = 0; i < 4; i++)
     {
         minus = 1;
         if(sumOfChess == 5) break;
         sumOfChess = 1;
         QPoint checker = pos;
 //        qDebug() << "r" << i;
-        for(int j = 0; j<5; j++)
+        for(int j = 0; j < 5; j++)
         {
-            checker.setX(checker.x()+direction[i][0] * minus);
-            checker.setY(checker.y()+direction[i][1] * minus);
+            checker.setX(checker.x() + direction[i][0] * minus);
+            checker.setY(checker.y() + direction[i][1] * minus);
             if(chessboard->getChess(checker) == term)
             {
                 sumOfChess++;

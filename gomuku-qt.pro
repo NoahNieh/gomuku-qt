@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,7 +31,8 @@ SOURCES += \
     chessboard.cpp \
     player.cpp \
     human.cpp \
-    ai.cpp
+    ai.cpp \
+    network.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -38,10 +40,12 @@ HEADERS += \
     chessboard.h \
     player.h \
     human.h \
-    ai.h
+    ai.h \
+    network.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    network.ui
 
 RESOURCES += \
     resource.qrc
