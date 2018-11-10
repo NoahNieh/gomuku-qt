@@ -24,6 +24,23 @@ void Judge::setGameMode(int value)
 }
 
 
+int Judge::getRole() const
+{
+    return role;
+}
+
+void Judge::setRole(int value)
+{
+    role = value;
+}
+
+void Judge::restartGame()
+{
+    delete this->player[0];
+    delete this->player[1];
+    playWithHum(this->role==2?1:2);
+}
+
 Judge::Judge()
 {
     this->chessboard = NULL;
@@ -32,6 +49,7 @@ Judge::Judge()
     this->game_mode = 0;
     this->player[0] = NULL;
     this->player[1] = NULL;
+    this->role = 0;
 }
 
 int Judge::getTerm()
@@ -114,9 +132,10 @@ int Judge::playWithHum(int role)
     {
         delete chessboard;
     }
-    chessboard = new Chessboard();
-    game_mode = 2;
-    term = 1;
+    this->chessboard = new Chessboard();
+    this->game_mode = 2;
+    this->term = 1;
+    this->role = role;
     if(role == 2)
     {
         this->is_your_term = false;
@@ -133,6 +152,7 @@ int Judge::resetJudge()
 {
     term = 0;
     game_mode = 0;
+    this->role = 0;
     return 0;
 }
 

@@ -15,6 +15,7 @@ private:
     int winner;
     int game_mode; // 0, 1:ai, 2:hum, 3:wait for connect
     bool is_your_term;
+    int role;
 public:
     Judge();
     int getTerm();
@@ -32,6 +33,11 @@ public:
     void setWinner(int winner);
     bool isYourTerm() const;
     void setGameMode(int value);
+    int getRole() const;
+    void setRole(int value);
+    void restartGame();
+signals:
+    void restartGameSignal();
 };
 
 #endif // JUDGE_H

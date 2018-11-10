@@ -87,6 +87,7 @@ void MainWindow::createServer(int port)
     connect(this->tcp_server, &QTcpServer::newConnection, this, &MainWindow::getConnect);
     this->status = 2;
     this->ui->status->setText("等待连接");
+    this->ui->playWithHum->setText("断开");
 //    this->ui->disconnect->show();
     this->judge->setGameMode(3);
 }
@@ -105,6 +106,7 @@ void MainWindow::connectServerSlot(QString address, int port)
     {
         this->ui->status->setText("已连接");
         this->status = 1;
+        this->ui->playWithCom->setText("重新开始");
         this->ui->playWithHum->setText("断开");
 
     }
@@ -129,6 +131,7 @@ void MainWindow::getConnect()
     this->tcp_server->close();
     this->ui->status->setText("已连接");
     this->status = 1;
+    this->ui->playWithCom->setText("重新开始");
     this->ui->playWithHum->setText("断开");
     qDebug() << "get connect";
     connect(this->tcp_client, &QTcpSocket::disconnected, this->tcp_client, &QTcpSocket::deleteLater);
@@ -192,6 +195,11 @@ void MainWindow::readChess()
             this->judge->setWinner(this->judge->getTerm());
             this->judge->resetJudge();
         }
+        else if(pos.x() == -3)
+        {
+            this->judge->restartGame();
+            update();
+        }
         else
         {
             this->judge->putChess(pos);
@@ -208,6 +216,7 @@ void MainWindow::disconnected()
     this->tcp_client->close();
     this->ui->status->setText("未连接");
     this->ui->playWithHum->setText("playWithHum");
+    this->ui->playWithCom->setText("playWithCom");
     this->status = 0;
     this->judge->resetJudge();
 }
@@ -239,6 +248,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 // (33,34)
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
+
 //    qDebug() << event->pos();
     //棋盘外
     if(event->pos().x() < 30 || event->pos().x() > 736 || event->pos().y() < 30 || event->pos().y() > 736)
@@ -312,6 +322,21 @@ void MainWindow::paintEvent(QPaintEvent *event)
             painter.drawText(33+pos.x()*50-25, 33+pos.y()*50-25, 50, 50,Qt::AlignCenter ,QString::number(tmp.size(),10));
         }
     }
+    // role info
+    if(this->judge->getRole() == 0)
+    {
+        this->ui->role->hide();
+    }
+    else if(this->judge->getRole() == 1)
+    {
+        this->ui->role->show();
+        this->ui->role->setText("您执黑棋 先手");
+    }
+    else if(this->judge->getRole() == 2)
+    {
+        this->ui->role->show();
+        this->ui->role->setText("您执白棋 后手");
+    }
 
     //win info
     if(this->judge->getWinner() != 0)
@@ -354,12 +379,22 @@ void MainWindow::on_playWithHum_clicked()
 
 void MainWindow::on_exit_clicked()
 {
+    disconnect();
     this->close();
 }
 
 void MainWindow::on_playWithCom_clicked()
 {
+    if(this->status == 1)
+    {
+        this->judge->restartGame();
+        this->sendChess(QPoint(-3, -3));
+        update();
+        return;
+    }
+    disconnected();
     this->judge->playWithCom(1);
+    this->status = 0;
     this->timer.stop();
     this->delay.stop();
     this->ui->winner->hide();
@@ -368,14 +403,7 @@ void MainWindow::on_playWithCom_clicked()
     update();
 }
 
-//useless
-void MainWindow::on_disconnect_clicked()
-{
-    this->tcp_client->disconnectFromHost();
-    if(this->tcp_server->isListening()) this->tcp_server->close();
-    this->client_num = 0;
-    this->ui->disconnect->hide();
-}
+
 
 void MainWindow::error(QAbstractSocket::SocketError e)
 {

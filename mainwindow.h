@@ -68,7 +68,6 @@ private slots:
     void sendChess(QPoint pos);
     void readChess();
     void disconnected();
-    void on_disconnect_clicked();//useless
     void error(QAbstractSocket::SocketError);
 };
 

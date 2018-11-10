@@ -120,6 +120,19 @@ border-image: url(:/image/image/button_pressed.png);
       <string>未连接</string>
      </property>
     </widget>
+    <widget class="QLabel" name="role">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>40</y>
+       <width>141</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="winner">
     <property name="enabled">
