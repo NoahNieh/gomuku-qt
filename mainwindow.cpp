@@ -182,19 +182,20 @@ void MainWindow::readChess()
     in >> pos;
     if(pos.x() != -2)
     {
-        if(pos.x() == -1)
-        {
-            this->judge->setWinner(this->judge->getTerm());
-            this->judge->resetJudge();
-        }
-        else if(pos.x() == -3)
+//        if(pos.x() == -1)
+//        {
+//            this->judge->setWinner(this->judge->getTerm());
+//            this->judge->resetJudge();
+//        }
+        if(pos.x() == -3)
         {
             this->judge->restartGame();
             update();
         }
         else
         {
-            this->judge->putChess(pos);
+            if(this->judge->putChess(pos) == 1)
+                this->judge->resetJudge();
         }
     }
     this->block_size = 0;
@@ -260,17 +261,15 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
     int flag;
     if((flag = this->judge->putChess(pos)) == 1)
     {
-        emit putChess(QPoint(-1, -1));
+//        emit putChess(QPoint(-1, -1));
         this->judge->resetJudge();
     }
-    else
-    {
-        if(this->status == 1)
-        {
-           emit putChess(pos);
-        }
 
+    if(this->status == 1)
+    {
+       emit putChess(pos);
     }
+
     update();
     if(this->judge->getGameMode() == 1 && flag != -1)
     {

@@ -118,6 +118,7 @@ int Judge::playWithCom(int go_first)
         this->chessboard->setChess(QPoint(7, 7), 1);
         this->term = 2;
     }
+    this->role = 1;
     this->winner = 0;
     return 0;
 }
@@ -152,7 +153,6 @@ int Judge::resetJudge()
 {
     term = 0;
     game_mode = 0;
-    this->role = 0;
     return 0;
 }
 
