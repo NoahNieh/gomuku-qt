@@ -56,7 +56,7 @@ border-image: url(:/image/image/button_pressed.png);
       </rect>
      </property>
      <property name="text">
-      <string>Exit</string>
+      <string>退出</string>
      </property>
     </widget>
     <widget class="QPushButton" name="playWithCom">
@@ -75,7 +75,7 @@ border-image: url(:/image/image/button_pressed.png);
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>playWithCom</string>
+      <string>与电脑玩</string>
      </property>
     </widget>
     <widget class="QPushButton" name="playWithHum">
@@ -88,23 +88,7 @@ border-image: url(:/image/image/button_pressed.png);
       </rect>
      </property>
      <property name="text">
-      <string>playWithHum</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="disconnect">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>530</y>
-       <width>201</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>disconnect</string>
+      <string>局域网对战</string>
      </property>
     </widget>
     <widget class="QLabel" name="status">

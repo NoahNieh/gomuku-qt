@@ -168,7 +168,6 @@ int Judge::isWin(QPoint pos)
         if(sumOfChess == 5) break;
         sumOfChess = 1;
         QPoint checker = pos;
-//        qDebug() << "r" << i;
         for(int j = 0; j < 5; j++)
         {
             checker.setX(checker.x() + direction[i][0] * minus);
@@ -176,7 +175,6 @@ int Judge::isWin(QPoint pos)
             if(chessboard->getChess(checker) == term)
             {
                 sumOfChess++;
-//                qDebug() << checker.x() << ", " << checker.y();
             }
             else
             {
