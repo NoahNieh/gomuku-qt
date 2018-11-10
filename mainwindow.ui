@@ -107,6 +107,19 @@ border-image: url(:/image/image/button_pressed.png);
       <string>disconnect</string>
      </property>
     </widget>
+    <widget class="QLabel" name="status">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>650</y>
+       <width>72</width>
+       <height>15</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>未连接</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="winner">
     <property name="enabled">

@@ -15,7 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->network = new NetWork();
-    this->tcp_client = new QTcpSocket(this);
+//    this->tcp_client = new QTcpSocket(this);
+    this->tcp_client = NULL;
     this->tcp_server = new QTcpServer(this);
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setWindowOpacity(0.95);
@@ -27,13 +28,14 @@ MainWindow::MainWindow(QWidget *parent) :
     this->judge = new Judge();
     this->block_size = 0;
     this->ui->disconnect->hide();
+    this->status = 0;
 
     connect(&(this->timer), SIGNAL(timeout()), this, SLOT(fadeInFadeOut()));
     connect(&(this->delay), SIGNAL(timeout()), this, SLOT(startFadeOut()));
-    connect(this->tcp_client, &QTcpSocket::readyRead, this, &MainWindow::readChess);
+//    connect(this->tcp_client, &QTcpSocket::readyRead, this, &MainWindow::readChess);
     connect(this->network, SIGNAL(createServer(int)), this, SLOT(createServer(int)));
     connect(this, SIGNAL(putChess(QPoint)), this, SLOT(sendChess(QPoint)));
-    connect(this->network, SIGNAL(connectServer(QString,int)), this, SLOT(connectServer(QString,int)));
+    connect(this->network, SIGNAL(connectServer(QString,int)), this, SLOT(connectServerSlot(QString,int)));
 }
 
 void MainWindow::fadeInFadeOut()
@@ -79,27 +81,58 @@ void MainWindow::startFadeOut()
 void MainWindow::createServer(int port)
 {
 //    this->tcp_server = new QTcpServer(this);
+    if(this->tcp_server->isListening()) tcp_server->close();
     if(this->tcp_server->isListening()) return;
     this->tcp_server->listen(QHostAddress::Any, port);
     connect(this->tcp_server, &QTcpServer::newConnection, this, &MainWindow::getConnect);
+    this->status = 2;
+    this->ui->status->setText("等待连接");
 //    this->ui->disconnect->show();
     this->judge->setGameMode(3);
 }
 
-void MainWindow::connectServer(QString address, int port)
+void MainWindow::connectServerSlot(QString address, int port)
 {
     block_size =  0;
+    this->tcp_client = new QTcpSocket(this);
+    connect(this->tcp_client, &QTcpSocket::readyRead, this, &MainWindow::readChess);
     this->tcp_client->abort();
+    qDebug() << address;
 //    this->ui->disconnect->show();
-    tcp_client->connectToHost(address, port);
+    this->tcp_client->connectToHost(address, port);
+    this->ui->status->setText("正在连接");
+    if(this->tcp_client->waitForConnected(10000))
+    {
+        this->ui->status->setText("已连接");
+        this->status = 1;
+        this->ui->playWithHum->setText("断开");
+
+    }
+    else
+    {
+        this->ui->status->setText("连接失败");
+        return;
+    }
+    connect(this->tcp_client, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+    connect(this->tcp_client, &QTcpSocket::disconnected, this->tcp_client, &QTcpSocket::deleteLater);
+    connect(this->tcp_client, &QTcpSocket::disconnected, this, &MainWindow::disconnected);
     this->judge->playWithHum(2);
 }
 
 void MainWindow::getConnect()
 {
 //    if(client_num != 0) return; // 需要发出错误信号
+    if(this->status != 2) return;
+    this->tcp_client = new QTcpSocket(this);
+    connect(this->tcp_client, &QTcpSocket::readyRead, this, &MainWindow::readChess);
     this->tcp_client = this->tcp_server->nextPendingConnection();
+    this->tcp_server->close();
+    this->ui->status->setText("已连接");
+    this->status = 1;
+    this->ui->playWithHum->setText("断开");
+    qDebug() << "get connect";
     connect(this->tcp_client, &QTcpSocket::disconnected, this->tcp_client, &QTcpSocket::deleteLater);
+    connect(this->tcp_client, &QTcpSocket::disconnected, this, &MainWindow::disconnected);
 //    connect(this->tcp_client, &QTcpSocket::disconnected, this, &MainWindow::on_disconnect_clicked);
     connect(this->tcp_client, &QTcpSocket::readyRead, this, &MainWindow::readChess);
     gameStart();
@@ -168,6 +201,17 @@ void MainWindow::readChess()
     update();
 }
 
+void MainWindow::disconnected()
+{
+    this->tcp_client->disconnectFromHost();
+    this->tcp_client->waitForConnected(10000);
+    this->tcp_client->close();
+    this->ui->status->setText("未连接");
+    this->ui->playWithHum->setText("playWithHum");
+    this->status = 0;
+    this->judge->resetJudge();
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -204,7 +248,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *event)
     }
 
     //棋盘内
-    if(this->judge->getGameMode() == 0 || !(this->judge->isYourTerm())) return;
+    if(this->judge->getGameMode() == 0 || !(this->judge->isYourTerm()) || this->judge->getGameMode() == 3) return;
     QPoint pos = event->pos();
     pos.setX((pos.x()-8) / 50);
     pos.setY((pos.y()-9) / 50);
@@ -292,6 +336,12 @@ void MainWindow::paintEvent(QPaintEvent *event)
 void MainWindow::on_playWithHum_clicked()
 {
 //    this->judge->playWithHum();
+    if(this->status != 0)
+    {
+        this->tcp_client->disconnectFromHost();
+        this->disconnected();
+        return;
+    }
     this->timer.stop();
     this->delay.stop();
     this->ui->winner->hide();
@@ -318,11 +368,16 @@ void MainWindow::on_playWithCom_clicked()
     update();
 }
 
+//useless
 void MainWindow::on_disconnect_clicked()
 {
     this->tcp_client->disconnectFromHost();
-    this->tcp_client->close();
     if(this->tcp_server->isListening()) this->tcp_server->close();
     this->client_num = 0;
     this->ui->disconnect->hide();
+}
+
+void MainWindow::error(QAbstractSocket::SocketError e)
+{
+    qDebug() << e;
 }

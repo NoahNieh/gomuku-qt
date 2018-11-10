@@ -40,6 +40,7 @@ private:
     QTimer delay;
     double opacity = 0;
     bool fade_in = true;
+    int status = 0; //0 disconnect, 1 connected 2 listening
     QGraphicsOpacityEffect *effect;
     QTcpServer *tcp_server;
     QTcpSocket *tcp_client;
@@ -61,12 +62,14 @@ private slots:
     void fadeInFadeOut();
     void startFadeOut();
     void createServer(int port);
-    void connectServer(QString address, int port);
+    void connectServerSlot(QString address, int port);
     void getConnect();
     void gameStart();
     void sendChess(QPoint pos);
     void readChess();
-    void on_disconnect_clicked();
+    void disconnected();
+    void on_disconnect_clicked();//useless
+    void error(QAbstractSocket::SocketError);
 };
 
 #endif // MAINWINDOW_H
