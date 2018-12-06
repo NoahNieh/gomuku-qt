@@ -8,8 +8,6 @@ class Player
 {
 protected:
     int role;
-    int time;
-    int win;
 public:
     Player();
     virtual ~Player();

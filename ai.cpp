@@ -3,15 +3,10 @@
 
 Ai::Ai()
 {
-    this->time = 0;
-    this->win = 0;
-
 }
 
 Ai::Ai(int role)
 {
-    this->time = 0;
-    this->win = 0;
     this->role = role;
 }
 
@@ -53,7 +48,6 @@ grade Ai::max_alphabeta(Chessboard chessboard, int depth, int alpha, int beta, i
 {
     grade best;
     grade tmp;
-//        qDebug() << res;
     best.score = INT_MIN;
     if(depth <= 0)
     {
